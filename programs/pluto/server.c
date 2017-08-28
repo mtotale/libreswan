@@ -352,52 +352,6 @@ int create_socket(struct raw_iface *ifp, const char *v_name, int port)
 	}
 #endif
 
-/*
- * NETKEY requires us to poke an IPsec policy hole that allows IKE packets,
- * unlike KLIPS which implicitly always allows plaintext IKE.
- * This installs one IPsec policy per socket but this function is called for each:
- * IPv4 port 500 and 4500
- * IPv6 port 500
- */
-#if defined(linux) && defined(NETKEY_SUPPORT)
-	if (kern_interface == USE_NETKEY) {
-		struct sadb_x_policy policy;
-		int level, opt;
-
-		zero(&policy);
-		policy.sadb_x_policy_len = sizeof(policy) /
-					   IPSEC_PFKEYv2_ALIGN;
-		policy.sadb_x_policy_exttype = SADB_X_EXT_POLICY;
-		policy.sadb_x_policy_type = IPSEC_POLICY_BYPASS;
-		policy.sadb_x_policy_dir = IPSEC_DIR_INBOUND;
-		policy.sadb_x_policy_id = 0;
-
-		if (addrtypeof(&ifp->addr) == AF_INET6) {
-			level = IPPROTO_IPV6;
-			opt = IPV6_IPSEC_POLICY;
-		} else {
-			level = IPPROTO_IP;
-			opt = IP_IPSEC_POLICY;
-		}
-
-		if (setsockopt(fd, level, opt,
-			       &policy, sizeof(policy)) < 0) {
-			LOG_ERRNO(errno, "setsockopt IPSEC_POLICY in process_raw_ifaces()");
-			close(fd);
-			return -1;
-		}
-
-		policy.sadb_x_policy_dir = IPSEC_DIR_OUTBOUND;
-
-		if (setsockopt(fd, level, opt,
-			       &policy, sizeof(policy)) < 0) {
-			LOG_ERRNO(errno, "setsockopt IPSEC_POLICY in process_raw_ifaces()");
-			close(fd);
-			return -1;
-		}
-	}
-#endif
-
 	setportof(htons(port), &ifp->addr);
 	if (bind(fd, sockaddrof(&ifp->addr), sockaddrlenof(&ifp->addr)) < 0) {
 		ipstr_buf b;

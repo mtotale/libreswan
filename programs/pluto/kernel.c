@@ -2656,6 +2656,15 @@ void init_kernel(void)
 	if (kernel_ops->init != NULL)
 		kernel_ops->init();
 
+	/* Add the port bypass polcies */
+
+	if (kernel_ops->port_bypass != NULL) {
+		if (!kernel_ops->port_bypass()) {
+			libreswan_log("Could not add all the port bypass policies");
+			exit_pluto(PLUTO_EXIT_KERNEL_FAIL);
+		}
+	}
+
 	/* register SA types that we can negotiate */
 	can_do_IPcomp = FALSE; /* until we get a response from KLIPS */
 	if (kernel_ops->pfkey_register != NULL)

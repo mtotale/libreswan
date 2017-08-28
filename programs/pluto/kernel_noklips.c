@@ -146,4 +146,5 @@ const struct kernel_ops noklips_kernel_ops = {
 	.kern_name = "noklips",
 	.overlap_supported = FALSE,
 	.sha2_truncbug_support = FALSE,
+	.port_bypass = NULL,
 };

@@ -631,4 +631,5 @@ const struct kernel_ops mast_kernel_ops = {
 	.kern_name = "mast",
 	.overlap_supported = TRUE,
 	.sha2_truncbug_support = FALSE,
+	.port_bypass = NULL,
 };
