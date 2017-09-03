@@ -8,6 +8,7 @@
  * Copyright (C) 2013 David McCullough <ucdevel@gmail.com>
  * Copyright (C) 2013-2016 Antony Antony <antony@phenome.org>
  * Copyright (C) 2016, Andrew Cagney <cagney@gnu.org>
+ * Copyright (C) 2017 Mayank Totale <mtotale@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -482,6 +483,7 @@ const struct keyword_def ipsec_conf_keywords_v2[] = {
   { "keep_alive",  kv_config | kv_alias,  kt_number,  KBF_KEEPALIVE,  NOT_ENUM },  /* obsolete _ */
   { "keep-alive",  kv_config,  kt_number,  KBF_KEEPALIVE,  NOT_ENUM },
 
+  { "listen-tcp", kv_config, kt_number, KBF_TCPPORT, NOT_ENUM },
   { "listen",  kv_config,  kt_string,  KSF_LISTEN,  NOT_ENUM },
   { "protostack",  kv_config,  kt_string,  KSF_PROTOSTACK,  &kw_proto_stack },
   { "nhelpers",  kv_config,  kt_number,  KBF_NHELPERS,  NOT_ENUM },
@@ -624,6 +626,8 @@ const struct keyword_def ipsec_conf_keywords_v2[] = {
 #endif
   { "encapsulation",  kv_conn,  kt_enum,  KBF_ENCAPS,  &kw_encaps_list },
   { "forceencaps",  kv_conn, kt_obsolete, KBF_WARNIGNORE, NOT_ENUM },
+  { "tcponly",  kv_conn, kt_bool, KBF_TCPONLY, NOT_ENUM },
+  { "tcp-remoteport",  kv_conn, kt_number, KBF_TCPREMOTE, NOT_ENUM },
 
   { "cat",  kv_conn | kv_leftright,  kt_bool,  KNCF_CAT,  NOT_ENUM },
 
